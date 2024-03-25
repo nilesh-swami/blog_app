@@ -56,7 +56,7 @@ if (isset($_GET['postId'])) {
 
 <div class="container">
     <div class="row m-2">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
                     <h3 class="text-center">Edit Post Details</h3>
@@ -105,7 +105,7 @@ if (isset($_GET['postId'])) {
         <div class="col-md-4">
             <span>Last set image</span>
             <br>
-            <img src="../images/auspian-logo.png" id="postImg" alt="">
+            <img src="uploads/<?php echo $postDetails['post_img_file_name']; ?>" id="postImg" alt="">
         </div>
     </div>
 </div>

@@ -73,6 +73,15 @@ class Post {
     public function get($post_id) {
         // Implement logic to get a post details
     }
+
+    function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
 	
     public function create() {
         // Check file size
@@ -100,11 +109,17 @@ class Post {
         $stmt->bind_param("isssss", $this->mbrid, $this->post_title, $this->post_desc, $this->post_status, $this->post_img_file_name, $this->post_date);
         
         // Set file name
-        $this->post_img_file_name = $_FILES['file']['name'];
+        // Set datetime stamp as part of the file name
+        $datetime = date('Ymd_His');
+        $original_filename = $_FILES['file']['name'];
+        $extension = pathinfo($original_filename, PATHINFO_EXTENSION);
+        $new_filename = $datetime . '_' . $this->generateRandomString() . '.' . $extension;
+
+        $this->post_img_file_name = $new_filename;
 
         // Move uploaded file to desired location
         $target_dir = "../member/uploads/"; // Specify upload directory
-        $target_file = $target_dir . basename($_FILES['file']['name']);
+        $target_file = $target_dir . $new_filename;
         if (!move_uploaded_file($_FILES['file']['tmp_name'], $target_file)) {
             // File upload failed, return JSON response
             $response['status'] = 'error';
